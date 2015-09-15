@@ -8,8 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="./handlebars-template.html">
-<link rel="import" href="../cloudstitch-spreadsheet/cloudstitch-spreadsheet.html">
+<link rel="import" href="./handlebars.html">
 
 <!--
 An element providing handlebars templating.
@@ -22,60 +21,32 @@ Example:
 @element cloudstitch-handlebars
 @demo demo/index.html
 -->
-<dom-module id="cloudstitch-handlebars">
+<dom-module id="handlebars-template">
   <style>
     :host {
       display: block;
       box-sizing: border-box;
     }
   </style>
-  <template>
-    <div id="hiab">
-      <cloudstitch-spreadsheet id="sheet" user="{{user}}" app="{{app}}" label="{{label}}" projection="items" content="{{sheetdata}}"></cloudstitch-spreadsheet>
-      <handlebars-template id="templ" data="{{sheetdata}}"><content></content></handlebars-template>
-    </div>
-  </template>
+  <template><div id="template"><content></content></div></template>
 </dom-module>
 
 <script>
 
   Polymer({
 
-    is: 'cloudstitch-handlebars',
+    is: 'handlebars-template',
 
     properties: {
       /**
-       * The Cloudstitch username.
-       */
-      user: {
-        type: String,
-        value: null
-      },
-
-      /**
-       * The Cloudstitch project name.
-       */
-      app: {
-        type: String,
-        value: null
-      },
-
-      /**
-       * The label of the Cloudstitch datasource.
-       */
-      label: {
-        type: String,
-        value: 'sheet'
-      },
-
-      /**
        * The data for the template.
        */
-      sheetdata: {
+      data: {
         type: Object,
         value: function() {
-          return {}
-        }
+          return null;
+        },
+        observer: 'render'
       }
     },
 
@@ -90,6 +61,8 @@ Example:
       // necessary), or kick off any processes the element wants to perform.
 
       // Save the template.
+      this.template = Handlebars.compile(this.$.template.innerHTML);
+      this.render();
     },
 
     attached: function() {
@@ -106,7 +79,16 @@ Example:
       // removed from a document.
       //
       // Use this to clean up anything you did in `attached`.
+    },
+
+    // Element Behavior
+    render: function() {
+      if (this.template) {
+        console.log('render', this.template, this.data);
+        this.$.template.innerHTML = this.template(this.data);
+      }
     }
+
 
   });
 
