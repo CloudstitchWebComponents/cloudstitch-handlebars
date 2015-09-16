@@ -1,0 +1,38 @@
+{
+  "name": "cloudstitch-handlebars",
+  "authors": [
+    "Ted Benson <ted@cloudstitch.com>"
+  ],
+  "description": "An element wrapping a handlebars template.",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "handlebars",
+    "cloudstitch"
+  ],
+  "main": "cloudstitch-handlebars.html",
+  "license": "BSD",
+  "homepage": "https://github.com/<USERNAME>/seed-element/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "cloudstitch-spreadsheet": "CloudstitchWebComponents/cloudstitch-spreadsheet",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  },
+  "_release": "089f7b90af",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "089f7b90afe7739b3774387fbe3e85a95609c2d1"
+  },
+  "_source": "git://github.com/CloudstitchWebComponents/cloudstitch-handlebars.git",
+  "_target": "master",
+  "_originalSource": "CloudstitchWebComponents/cloudstitch-handlebars",
+  "_direct": true
+}

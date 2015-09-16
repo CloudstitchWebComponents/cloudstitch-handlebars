@@ -1,0 +1,39 @@
+{
+  "name": "cloudstitch-spreadsheet",
+  "authors": [
+    "Ted Benson <ted@cloudstitch.com>"
+  ],
+  "description": "An element providing access to a Cloudstitch Spreadsheet.",
+  "keywords": [
+    "cloudstitch",
+    "web-component",
+    "polymer",
+    "gsheet",
+    "google-spreadsheet",
+    "spreadsheet"
+  ],
+  "main": "cloudstitch-spreadsheet.html",
+  "license": "BSD",
+  "homepage": "https://github.com/CloudstitchWebComponents/cloudstitch-spreadsheet/",
+  "ignore": [
+    "/.*",
+    "/test/"
+  ],
+  "dependencies": {
+    "iron-ajax": "PolymerElements/iron-ajax#~1.0.4",
+    "polymer": "Polymer/polymer#^1.0.0"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "web-component-tester": "*"
+  },
+  "_release": "127d4f9934",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "127d4f9934c991b12991e1d7281578bb603eeb49"
+  },
+  "_source": "git://github.com/CloudstitchWebComponents/cloudstitch-spreadsheet.git",
+  "_target": "*",
+  "_originalSource": "CloudstitchWebComponents/cloudstitch-spreadsheet"
+}
