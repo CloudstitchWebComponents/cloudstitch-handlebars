@@ -86,12 +86,20 @@ Example:
       }
       
       // Render and fill the template
-      var templ = Handlebars.compile(this.$.box.template);
-      Polymer.dom(this.$.template).innerHTML = templ(data);
+      try {
+        var templ = Handlebars.compile(this.$.box.template);
+        Polymer.dom(this.$.template).innerHTML = templ(data);        
+      } catch(e) {
+        console.log(e);
+      }
 
       // Also render the content element
-      var templ2 = Handlebars.compile(this.$.inlined.innerHTML);
-      Polymer.dom(this.$.inlined).innerHTML = templ2(data);      
+      try {
+        var templ2 = Handlebars.compile(this.$.inlined.innerHTML);
+        Polymer.dom(this.$.inlined).innerHTML = templ2(data);              
+      } catch(e) {
+        console.log(e);
+      }
 
       // Run the post hook
       if (this.$.box.exports && this.$.box.exports.afterRender && (typeof this.$.box.exports.afterRender == 'function')) {
