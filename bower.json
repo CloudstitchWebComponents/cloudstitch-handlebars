@@ -1,6 +1,6 @@
 {
   "name": "cloudstitch-handlebars",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "authors": [
     "Ted Benson <ted@cloudstitch.com>"
   ],
@@ -19,7 +19,7 @@
     "/test/"
   ],
   "dependencies": {
-    "cloudstitch-spreadsheet": "CloudstitchWebComponents/cloudstitch-spreadsheet",
+    "cloudstitch-box": "CloudstitchWebComponents/cloudstitch-box",
     "polymer": "Polymer/polymer#^1.0.0"
   },
   "devDependencies": {
