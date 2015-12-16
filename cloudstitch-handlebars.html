@@ -26,8 +26,13 @@ Example:
       user="{{user}}" 
       app="{{app}}" 
       label="{{label}}" 
-      projection="items" 
+      projection="{{projection}}" 
       data="{{sheetdata}}"
+      domain="{{domain}}"
+      proto="{{proto}}"
+      style-file="{{styleFile}}"
+      script-file="{{scriptFile}}"
+      template-file="{{templateFile}}"
       on-ready-for-render="render"></cloudstitch-box>
     <div id="template"></div>
     <div id="inlined"><content></content></div>
@@ -66,6 +71,14 @@ Example:
       },
 
       /**
+       * The projection for that sheet
+       */
+      projection: {
+        type: String,
+        value: 'items'
+      },
+
+      /**
        * The data for the template.
        */
       sheetdata: {
@@ -73,7 +86,88 @@ Example:
         value: function() {
           return null;
         }
+      },
+
+      /**
+       * The domain from which to load the assets.
+       */
+      domain: {
+        type: String,
+        value: 'apps.cloudstitch.io'
+      },
+
+      /**
+       * The protocol to use
+       */
+      proto: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * The subpath of domain/user/app where the CSS lives.
+       */
+      styleFile: {
+        type: String,
+        value: 'styles.css'
+      },
+
+      /**
+       * The subpath of domain/user/app where the Javascript lives.
+       */
+      scriptFile: {
+        type: String,
+        value: 'scripts.js'
+      },
+
+      /**
+       * The domain from which to load the assets.
+       */
+      domain: {
+        type: String,
+        value: 'apps.cloudstitch.io'
+      },
+
+      /**
+       * The protocol to use
+       */
+      proto: {
+        type: String,
+        value: ''
+      },
+
+      /**
+       * The subpath of domain/user/app where the CSS lives.
+       */
+      styleFile: {
+        type: String,
+        value: 'styles.css'
+      },
+
+      /**
+       * The subpath of domain/user/app where the Javascript lives.
+       */
+      scriptFile: {
+        type: String,
+        value: 'scripts.js'
+      },
+
+      /**
+       * The subpath of domain/user/app where the HTML lives.
+       */
+      templateFile: {
+        type: String,
+        value: 'widget.html'
+      },
+
+      /**
+       * The subpath of domain/user/app where the HTML lives.
+       */
+      templateFile: {
+        type: String,
+        value: 'widget.html'
       }
+
     },
 
     render: function() {
