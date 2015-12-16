@@ -14,20 +14,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>cloudstitch-handlebars Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../handlebars-template.html">
     <link rel="import" href="../cloudstitch-handlebars.html">
   </head>
   <body unresolved>
 
-    <p>An example of <code>&lt;handlebars-template&gt;</code>:</p>
-
-    <handlebars-template data='{"name":"Ted"}'>
-      Hi, {{name}}
-    </handlebars-template>
-
     <p>An example of <code>&lt;cloudstitch-handlebars&gt;</code>:</p>
 
-    <cloudstitch-handlebars user="ted" app="stack-in-a-box-13">
+    <cloudstitch-handlebars user="project-templates" app="handlebars-in-a-box">
       <h1>Menu</h1>
       {{#each Sheet1}}
       <li class="menu-item"><span class="price">{{Price}}</span> costs {{Special}}</li>

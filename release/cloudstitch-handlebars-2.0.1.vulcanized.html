@@ -7601,6 +7601,29 @@ if (!window.Promise) {
         });
       }.bind(this))
 
+      xhr.addEventListener('readystatechange', function () {
+        if (xhr.readyState === 2 && options.async !== false) {
+          // Headers have been received.
+          var jsonPrefix = xhr.getResponseHeader('X-JSON-Prefix') ||
+              options.jsonPrefix;
+          var handleAs = options.handleAs;
+
+          // If a JSON prefix is present, the responseType must be 'text' or the
+          // browser won’t be able to parse the response.
+          if (!!jsonPrefix || !handleAs) {
+            handleAs = 'text';
+          }
+          // In IE, `xhr.responseType` is an empty string when the response
+          // returns. Hence, caching it as `xhr._responseType`.
+          xhr.responseType = xhr._responseType = handleAs;
+
+          // Cache the JSON prefix, if it exists.
+          if (!!jsonPrefix) {
+            xhr._jsonPrefix = jsonPrefix;
+          }
+        }
+      }.bind(this));
+
       xhr.addEventListener('error', function (error) {
         this._setErrored(true);
         this._updateStatus();
@@ -7666,25 +7689,6 @@ if (!window.Promise) {
         );
       }, this);
 
-      if (options.async !== false) {
-        var handleAs = options.handleAs;
-
-        // If a JSON prefix is present, the responseType must be 'text' or the
-        // browser won’t be able to parse the response.
-        if (!!options.jsonPrefix || !handleAs) {
-          handleAs = 'text';
-        }
-
-        // In IE, `xhr.responseType` is an empty string when the response
-        // returns. Hence, caching it as `xhr._responseType`.
-        xhr.responseType = xhr._responseType = handleAs;
-
-        // Cache the JSON prefix, if it exists.
-        if (!!options.jsonPrefix) {
-          xhr._jsonPrefix = options.jsonPrefix;
-        }
-      }
-
       xhr.withCredentials = !!options.withCredentials;
       xhr.timeout = options.timeout;
 
@@ -7710,7 +7714,15 @@ if (!window.Promise) {
       var xhr = this.xhr;
       var responseType = xhr.responseType || xhr._responseType;
       var preferResponseText = !this.xhr.responseType;
-      var prefixLen = (xhr._jsonPrefix && xhr._jsonPrefix.length) || 0;
+      var prefixHeader = xhr.getResponseHeader('X-JSON-Prefix');
+      if (prefixHeader) {
+        // If a JSON prefix header is set, the response must be interpretted as
+        // text so that the prefix can be stripped. Otherwise the browser will
+        // try and fail to.
+        responseType = 'text';
+      }
+      var prefixLen = (prefixHeader && prefixHeader.length) ||
+          (xhr._jsonPrefix && xhr._jsonPrefix.length) || 0;
 
       try {
         switch (responseType) {
@@ -8086,6 +8098,9 @@ if (!window.Promise) {
        * many backends will mitigate this by prefixing all JSON response bodies
        * with a string that would be nonsensical to a JavaScript parser.
        *
+       * In the case where the server returns a prefix via the `X-JSON-Prefix`
+       * header, this attribute can be omitted as the value of the header will
+       * supercede the value passed here.
        */
       jsonPrefix: {
         type: String,
@@ -8581,7 +8596,7 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
     <iron-ajax id="scriptLoader" auto="" handle-as="text" on-response="_scriptLoaderResponse" url="[[scriptUrl]]"></iron-ajax>
     <iron-ajax id="templateLoader" handle-as="text" on-response="_templateLoaderResponse" url="[[templateUrl]]"></iron-ajax>
 
-    <cloudstitch-spreadsheet auto="" id="sheet" user="[[user]]" app="[[app]]" label="[[label]]" projection="[[projection]]" domain="[[dataDomain]]" worksheet="[[worksheet]]" proto="[[proto]]" content="{{data}}"></cloudstitch-spreadsheet>
+    <cloudstitch-spreadsheet autoload="" id="sheet" user="[[user]]" app="[[app]]" label="[[label]]" projection="[[projection]]" domain="[[domain]]" worksheet="[[worksheet]]" proto="[[proto]]" content="{{data}}"></cloudstitch-spreadsheet>
 
   </template>
 </dom-module>
@@ -8647,18 +8662,11 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
       /**
        * The domain from which to load the assets.
        */
-      fileDomain: {
+      domain: {
         type: String,
         value: 'apps.cloudstitch.io'
       },
 
-      /**
-       * The domain from which to load the data.
-       */
-      dataDomain: {
-        type: String,
-        value: 'api.cloudstitch.com'
-      },
       /**
        * The protocol to use
        */
@@ -8696,7 +8704,7 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
        */
       styleUrl: {
         type: String,
-        computed: 'makeStyleUrl(proto, fileDomain, user, app, styleFile)'
+        computed: 'makeStyleUrl(proto, domain, user, app, styleFile)'
       },
 
       /**
@@ -8704,7 +8712,7 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
        */
       scriptUrl: {
         type: String,
-        computed: 'makeScriptUrl(proto, fileDomain, user, app, scriptFile)'
+        computed: 'makeScriptUrl(proto, domain, user, app, scriptFile)'
       },
 
       /**
@@ -8712,7 +8720,7 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
        */
       templateUrl: {
         type: String,
-        computed: 'makeTemplateUrl(proto, fileDomain, user, app, templateFile)'
+        computed: 'makeTemplateUrl(proto, domain, user, app, templateFile)'
       },
 
       forWebComponent: {
@@ -8845,7 +8853,7 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
     }
   </style>
   <template>
-    <cloudstitch-box id="box" user="{{user}}" app="{{app}}" label="{{label}}" projection="{{projection}}" data="{{sheetdata}}" file-domain="{{fileDomain}}" data-domain="{{dataDomain}}" proto="{{proto}}" style-file="{{styleFile}}" script-file="{{scriptFile}}" template-file="{{templateFile}}" on-ready-for-render="render"></cloudstitch-box>
+    <cloudstitch-box id="box" user="{{user}}" app="{{app}}" label="{{label}}" projection="{{projection}}" data="{{sheetdata}}" domain="{{domain}}" proto="{{proto}}" style-file="{{styleFile}}" script-file="{{scriptFile}}" template-file="{{templateFile}}" on-ready-for-render="render"></cloudstitch-box>
     <div id="template"></div>
     <div id="inlined"><content></content></div>
   </template>
@@ -8903,17 +8911,9 @@ hash:a.hash,program:f,openStrip:{},inverseStrip:{},closeStrip:{},loc:e}}function
       /**
        * The domain from which to load the assets.
        */
-      fileDomain: {
+      domain: {
         type: String,
         value: 'apps.cloudstitch.io'
-      },
-
-      /**
-       * The domain from which to load the data.
-       */
-      dataDomain: {
-        type: String,
-        value: 'api.cloudstitch.com'
       },
 
       /**
